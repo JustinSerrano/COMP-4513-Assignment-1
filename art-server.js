@@ -1,7 +1,6 @@
 // This work was assisted with Copilot (ChatGPT) and Supabase
 
 const express = require('express');
-const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
 
 const app = express();

@@ -10,11 +10,12 @@ router.get('/', async (req, res) => {
     const { data, error } = await supabase
         .from('eras')
         .select('*');
-    res.json(data);
     if (error) {
         console.error(error);
         return res.status(500).json({ error: "Error fetching eras data" });
     }
+
+    res.json(data);
 });
 
 module.exports = router;
