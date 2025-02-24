@@ -2,7 +2,8 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.49.0",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "node": "18.20.7"
   },
   "name": "w2025-assign1",
   "version": "1.0.0",
