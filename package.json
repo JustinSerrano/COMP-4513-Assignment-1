@@ -9,7 +9,8 @@
   "description": "**Please view `COMP4513 Assignment 1.pdf` for instructions**",
   "main": "art-server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node art-server.js"
   },
   "repository": {
     "type": "git",
