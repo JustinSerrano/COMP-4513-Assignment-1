@@ -1,17 +1,26 @@
+/**
+ * Counts API Routes - COMP 4513 Assignment 1
+ * Assisted by ChatGPT and Supabase
+ */
+
 const express = require('express');
 const router = express.Router();
 const { createClient } = require('@supabase/supabase-js');
 
-// Supabase Client
+// Supabase Client Initialization
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
-// Get all genres with painting counts
+/**
+ * @route GET /api/counts/genres
+ * @desc Get all genres with painting counts (sorted fewest to most)
+ */
 router.get('/genres', async (req, res) => {
     const { data, error } = await supabase
         .from('paintingGenres')
         .select('genreId, genres!inner(genreName)');
+
     if (error) {
-        console.error(error);
+        console.error("Supabase Error:", error);
         return res.status(500).json({ error: "Error fetching genre data" });
     }
 
@@ -19,6 +28,7 @@ router.get('/genres', async (req, res) => {
         return res.status(404).json({ error: "No genres found." });
     }
 
+    // Count paintings per genre
     const genreCounts = {};
     data.forEach(({ genreId, genres }) => {
         if (!genreCounts[genreId]) {
@@ -27,26 +37,28 @@ router.get('/genres', async (req, res) => {
         genreCounts[genreId].count += 1;
     });
 
-    const sortedData = Object.values(genreCounts).sort((a, b) => a.count - b.count);
-
-    res.json(sortedData);
+    // Sort genres from fewest to most paintings
+    res.json(Object.values(genreCounts).sort((a, b) => a.count - b.count));
 });
 
-// Get all artists with painting counts
+/**
+ * @route GET /api/counts/artists
+ * @desc Get all artists with painting counts (sorted most to least)
+ */
 router.get('/artists', async (req, res) => {
     const { data, error } = await supabase
         .from('paintings')
-        .select(`
-            artistId, 
-            artists!inner(firstName, lastName)`);
+        .select('artistId, artists!inner(firstName, lastName)');
+
     if (error) {
-        console.error(error);
+        console.error("Supabase Error:", error);
         return res.status(500).json({ error: "Error fetching artist data" });
     }
     if (!data || data.length === 0) {
         return res.status(404).json({ error: "No artists found." });
     }
 
+    // Count paintings per artist
     const artistCounts = {};
     data.forEach(({ artistId, artists }) => {
         if (!artistCounts[artistId]) {
@@ -59,12 +71,14 @@ router.get('/artists', async (req, res) => {
         artistCounts[artistId].count += 1;
     });
 
-    const sortedData = Object.values(artistCounts).sort((a, b) => b.count - a.count);
-
-    res.json(sortedData);
+    // Sort artists from most to least paintings
+    res.json(Object.values(artistCounts).sort((a, b) => b.count - a.count));
 });
 
-// Get all genres with a minimum number of paintings
+/**
+ * @route GET /api/counts/topgenres/:ref
+ * @desc Get all genres with at least `minCount` paintings (sorted most to least)
+ */
 router.get('/topgenres/:ref', async (req, res) => {
     const minCount = parseInt(req.params.ref, 10);
 
@@ -76,10 +90,11 @@ router.get('/topgenres/:ref', async (req, res) => {
         .select('genreId, genres!inner(genreName)');
 
     if (error) {
-        console.error(error);
+        console.error("Supabase Error:", error);
         return res.status(500).json({ error: "Error fetching data" });
     }
 
+    // Count paintings per genre
     const genreCounts = {};
     data.forEach(({ genreId, genres }) => {
         if (!genreCounts[genreId]) {
@@ -88,6 +103,7 @@ router.get('/topgenres/:ref', async (req, res) => {
         genreCounts[genreId].count += 1;
     });
 
+    // Filter genres with more than `minCount` paintings and sort from most to least
     const filteredData = Object.values(genreCounts)
         .filter(item => item.count > minCount)
         .sort((a, b) => b.count - a.count);

@@ -1,28 +1,37 @@
 {
+  "name": "w2025-assign1",
+  "version": "1.0.0",
+  "description": "COMP 4513 - Assignment 1: Node.js, Express, and Supabase API",
+  "main": "art-server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node art-server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.0",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "node": "18.20.7"
+    "express": "^4.21.2"
   },
-  "name": "w2025-assign1",
-  "version": "1.0.0",
-  "description": "**Please view `COMP4513 Assignment 1.pdf` for instructions**",
-  "main": "art-server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node art-server.js"
+  "engines": {
+    "node": ">=18.0.0"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JustinSerrano/COMP-4513-Assignment-1.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
+  "keywords": ["Node.js", "Express", "Supabase", "COMP4513", "API"],
+  "author": "Justin Serrano",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/JustinSerrano/COMP-4513-Assignment-1/issues"
   },
-  "homepage": "https://github.com/JustinSerrano/COMP-4513-Assignment-1#readme"
+  "homepage": "https://github.com/JustinSerrano/COMP-4513-Assignment-1#readme",
+  "contributors": [
+    {
+      "name": "ChatGPT",
+      "url": "https://openai.com/chatgpt",
+      "role": "AI assistant for code review & improvements"
+    }
+  ]
 }

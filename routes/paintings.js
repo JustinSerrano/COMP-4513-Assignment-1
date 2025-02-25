@@ -1,38 +1,47 @@
+/**
+ * Paintings API Routes - COMP 4513 Assignment 1
+ * Assisted by ChatGPT and Supabase
+ */
+
 const express = require('express');
 const router = express.Router();
 const { createClient } = require('@supabase/supabase-js');
 
-// Supabase Client
+// Supabase Client Initialization
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
-// Get all paintings
+/**
+ * @route GET /api/paintings
+ * @desc Get all paintings
+ */
 router.get('/', async (req, res) => {
     const { data, error } = await supabase
         .from('paintings')
         .select(`
-            paintingId,
-            title,
-            yearOfWork,
-            imageFileName,
+            paintingId, title, yearOfWork, imageFileName,
             artists!inner(*),
             galleries!inner(*)
         `)
         .order('title', { ascending: true });
+
     if (error) {
-        console.error(error);
+        console.error("Supabase Error:", error);
         return res.status(500).json({ error: "Error fetching paintings data" });
     }
 
     res.json(data);
 });
 
-// Get all paintings sorted by title or year
+/**
+ * @route GET /api/paintings/sort/:sortBy
+ * @desc Get all paintings sorted by title or year
+ */
 router.get('/sort/:sortBy', async (req, res) => {
     let { sortBy } = req.params;
 
     const sortMap = {
         title: "title",
-        year: "yearOfWork"  // Maps user input "year" to "yearOfWork"
+        year: "yearOfWork"
     };
 
     if (!sortMap[sortBy]) {
@@ -42,23 +51,24 @@ router.get('/sort/:sortBy', async (req, res) => {
     const { data, error } = await supabase
         .from('paintings')
         .select(`
-            paintingId,
-            title,
-            yearOfWork,
-            imageFileName,
+            paintingId, title, yearOfWork, imageFileName,
             artists!inner(*),
             galleries!inner(*)
         `)
         .order(sortMap[sortBy], { ascending: true });
+
     if (error) {
-        console.error(error);
+        console.error("Supabase Error:", error);
         return res.status(500).json({ error: "Error fetching paintings data" });
     }
 
     res.json(data);
 });
 
-// Get painting by id
+/**
+ * @route GET /api/paintings/:ref
+ * @desc Get painting by ID
+ */
 router.get('/:ref', async (req, res) => {
     const paintingId = parseInt(req.params.ref, 10);
 
@@ -69,17 +79,16 @@ router.get('/:ref', async (req, res) => {
     const { data, error } = await supabase
         .from('paintings')
         .select(`
-            paintingId,
-            title,
-            yearOfWork,
-            imageFileName,
+            paintingId, title, yearOfWork, imageFileName,
             artists!inner(*),
             galleries!inner(*)
         `)
         .eq('paintingId', paintingId)
-        .order('title', { ascending: true });
+        .order('title', { ascending: true })
+        .single();
+
     if (error) {
-        console.error(error);
+        console.error("Supabase Error:", error);
         return res.status(500).json({ error: "Error fetching paintings data" });
     }
     if (!data || data.length === 0) {
@@ -89,7 +98,10 @@ router.get('/:ref', async (req, res) => {
     res.json(data);
 });
 
-// Search paintings by title
+/**
+ * @route GET /api/paintings/search/:substring
+ * @desc Search paintings by title
+ */
 router.get('/search/:substring', async (req, res) => {
     const substring = req.params.substring.trim();
 
@@ -99,17 +111,15 @@ router.get('/search/:substring', async (req, res) => {
     const { data, error } = await supabase
         .from('paintings')
         .select(`
-            paintingId,
-            title,
-            yearOfWork,
-            imageFileName,
+            paintingId, title, yearOfWork, imageFileName,
             artists!inner(*),
             galleries!inner(*)
         `)
         .ilike('title', `%${substring}%`)
         .order('title', { ascending: true });
+
     if (error) {
-        console.error(error);
+        console.error("Supabase Error:", error);
         return res.status(500).json({ error: "Error fetching paintings data" });
     }
     if (!data || data.length === 0) {
@@ -119,7 +129,10 @@ router.get('/search/:substring', async (req, res) => {
     res.json(data);
 });
 
-// Get paintings by year range
+/**
+ * @route GET /api/paintings/years/:startYear/:endYear
+ * @desc Get paintings within a year range
+ */
 router.get('/years/:startYear/:endYear', async (req, res) => {
     let startYear = parseInt(req.params.startYear, 10);
     let endYear = parseInt(req.params.endYear, 10);
@@ -135,18 +148,16 @@ router.get('/years/:startYear/:endYear', async (req, res) => {
     const { data, error } = await supabase
         .from('paintings')
         .select(`
-            paintingId,
-            title,
-            yearOfWork,
-            imageFileName,
+            paintingId, title, yearOfWork, imageFileName,
             artists!inner(*),
             galleries!inner(*)
         `)
         .gte('yearOfWork', startYear)
         .lte('yearOfWork', endYear)
         .order('yearOfWork', { ascending: true });
+
     if (error) {
-        console.error(error);
+        console.error("Supabase Error:", error);
         return res.status(500).json({ error: "Error fetching paintings data" });
     }
 
@@ -157,7 +168,10 @@ router.get('/years/:startYear/:endYear', async (req, res) => {
     res.json(data);
 });
 
-// Get paintings by gallery
+/**
+ * @route GET /api/paintings/galleries/:ref
+ * @desc Get paintings by gallery ID
+ */
 router.get('/galleries/:ref', async (req, res) => {
     const galleryId = parseInt(req.params.ref, 10);
 
@@ -168,18 +182,16 @@ router.get('/galleries/:ref', async (req, res) => {
     const { data, error } = await supabase
         .from('paintings')
         .select(`
-            paintingId,
-            title,
-            yearOfWork,
-            imageFileName,
+            paintingId, title, yearOfWork, imageFileName,
             artists!inner(*),
             galleries!inner(*)
         `)
         .eq('galleryId', galleryId)
         .order('title', { ascending: true });
+
     if (error) {
-        console.error(error);
-        return res.status(500).json({ error: "Error fetching data" });
+        console.error("Supabase Error:", error);
+        return res.status(500).json({ error: "Error fetching paintings data" });
     }
     if (!data || data.length === 0) {
         return res.status(404).json({ error: `No paintings found for gallery ID ${galleryId}.` });
@@ -188,7 +200,10 @@ router.get('/galleries/:ref', async (req, res) => {
     res.json(data);
 });
 
-// Get paintings by artist
+/**
+ * @route GET /api/paintings/artist/:ref
+ * @desc Get paintings by artist ID
+ */
 router.get('/artist/:ref', async (req, res) => {
     const artistId = parseInt(req.params.ref, 10);
 
@@ -198,18 +213,16 @@ router.get('/artist/:ref', async (req, res) => {
     const { data, error } = await supabase
         .from('paintings')
         .select(`
-            paintingId,
-            title,
-            yearOfWork,
-            imageFileName,
+            paintingId, title, yearOfWork, imageFileName,
             artists!inner(*),
             galleries!inner(*)
         `)
         .eq('artistId', artistId)
         .order('title', { ascending: true });
+
     if (error) {
-        console.error(error);
-        return res.status(500).json({ error: "Error fetching data" });
+        console.error("Supabase Error:", error);
+        return res.status(500).json({ error: "Error fetching paintings data" });
     }
     if (!data || data.length === 0) {
         return res.status(404).json({ error: `No paintings found for artist ID ${artistId}.` });
@@ -218,7 +231,10 @@ router.get('/artist/:ref', async (req, res) => {
     res.json(data);
 });
 
-// Get paintings by artist's nationality
+/**
+ * @route GET /api/paintings/artist/country/:ref
+ * @desc Get paintings by artist's nationality
+ */
 router.get('/artist/country/:ref', async (req, res) => {
     const nationality = req.params.ref.trim();
 
@@ -228,17 +244,15 @@ router.get('/artist/country/:ref', async (req, res) => {
     const { data, error } = await supabase
         .from('paintings')
         .select(`
-            paintingId,
-            title,
-            yearOfWork,
-            imageFileName,
+            paintingId, title, yearOfWork, imageFileName,
             artists!inner(*),
             galleries!inner(*)
         `)
         .ilike('artists.nationality', `${nationality}%`)
         .order('title', { ascending: true });
+
     if (error) {
-        console.error(error);
+        console.error("Supabase Error:", error);
         return res.status(500).json({ error: "Error fetching paintings data" });
     }
     if (!data || data.length === 0) {
@@ -248,7 +262,10 @@ router.get('/artist/country/:ref', async (req, res) => {
     res.json(data);
 });
 
-// Get paintings by genre
+/**
+ * @route GET /api/paintings/genre/:ref
+ * @desc Get paintings by genre ID (Sorted by yearOfWork)
+ */
 router.get('/genre/:ref', async (req, res) => {
     const genreId = parseInt(req.params.ref, 10);
 
@@ -257,30 +274,30 @@ router.get('/genre/:ref', async (req, res) => {
     }
     const { data, error } = await supabase
         .from('paintingGenres')
-        .select(`
-        paintings!inner(paintingId, title, yearOfWork)
-    `)
+        .select('paintings!inner(paintingId, title, yearOfWork)')
         .eq('genreId', genreId)
+
     if (error) {
-        console.error(error);
+        console.error("Supabase Error:", error);
         return res.status(500).json({ error: "Error fetching paintings data" });
     }
     if (!data || data.length === 0) {
         return res.status(404).json({ error: `No paintings found for genre ID ${genreId}.` });
     }
 
-    const sortedData = data
-        .map(item => ({
-            paintingId: item.paintings.paintingId,
-            title: item.paintings.title,
-            yearOfWork: item.paintings.yearOfWork
-        }))
-        .sort((a, b) => a.yearOfWork - b.yearOfWork);
+    const sortedData = data.map(item => ({
+        paintingId: item.paintings.paintingId,
+        title: item.paintings.title,
+        yearOfWork: item.paintings.yearOfWork
+    })).sort((a, b) => a.yearOfWork - b.yearOfWork);
 
     res.json(sortedData);
 });
 
-// Get paintings by era
+/**
+ * @route GET /api/paintings/era/:ref
+ * @desc Get paintings by era ID (Sorted by yearOfWork)
+ */
 router.get('/era/:ref', async (req, res) => {
     const eraId = parseInt(req.params.ref, 10);
 
@@ -294,21 +311,20 @@ router.get('/era/:ref', async (req, res) => {
             genres!inner(genreId, eraId)
         `)
         .eq('genres.eraId', eraId);
+
     if (error) {
-        console.error(error);
+        console.error("Supabase Error:", error);
         return res.status(500).json({ error: "Error fetching paintings data" });
     }
     if (!data || data.length === 0) {
         return res.status(404).json({ error: `No paintings found for era ID ${eraId}.` });
     }
 
-    const sortedData = data
-        .map(item => ({
-            paintingId: item.paintings.paintingId,
-            title: item.paintings.title,
-            yearOfWork: item.paintings.yearOfWork
-        }))
-        .sort((a, b) => a.yearOfWork - b.yearOfWork);
+    const sortedData = data.map(item => ({
+        paintingId: item.paintings.paintingId,
+        title: item.paintings.title,
+        yearOfWork: item.paintings.yearOfWork
+    })).sort((a, b) => a.yearOfWork - b.yearOfWork);
 
     res.json(sortedData);
 });

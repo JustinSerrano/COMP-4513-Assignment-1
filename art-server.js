@@ -1,4 +1,7 @@
-// This work was assisted with Copilot (ChatGPT) and Supabase
+/**
+ * COMP 4513 - Assignment 1: Art API
+ * Assisted by ChatGPT and Supabase
+ */
 
 const express = require('express');
 require('dotenv').config();
@@ -6,6 +9,7 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middleware
 app.use(express.json());
 
 // Import Routes
@@ -26,7 +30,7 @@ app.use('/api/counts', countsRoutes);
 
 // Root Route
 app.get('/', (req, res) => {
-    res.send('Welcome to the COMP 4513 ART-API');
+    res.json({ message: 'Welcome to the COMP 4513 ART-API' });
 });
 
 // Start Server

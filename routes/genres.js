@@ -1,28 +1,40 @@
+/**
+ * Genres API Routes - COMP 4513 Assignment 1
+ * Assisted by ChatGPT and Supabase
+ */
+
 const express = require('express');
 const router = express.Router();
 const { createClient } = require('@supabase/supabase-js');
 
-// Supabase Client
+// Supabase Client Initialization
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
-// Get all genres
+/**
+ * @route GET /api/genres
+ * @desc Get all genres with their associated eras
+ */
 router.get('/', async (req, res) => {
     const { data, error } = await supabase
         .from('genres')
         .select(`
             genreId,
             genreName,
-            eras!inner(*),
-            description`);
+            description,
+            eras!inner(eraId, eraName, eraYears`);
+
     if (error) {
-        console.error(error);
+        console.error("Supabase Error:", error);
         return res.status(500).json({ error: "Error fetching genre data" });
     }
 
     res.json(data);
 });
 
-// Get genre by ID
+/**
+ * @route GET /api/genres/:ref
+ * @desc Get a specific genre by ID
+ */
 router.get('/:ref', async (req, res) => {
     const genreId = parseInt(req.params.ref, 10);
 
@@ -35,11 +47,12 @@ router.get('/:ref', async (req, res) => {
         .select(`
             genreId,
             genreName,
-            eras!inner(*),
-            description`)
+            description,
+            eras!inner(eraId, eraName, eraYears`)
         .eq('genreId', genreId);
+
     if (error) {
-        console.error(error);
+        console.error("Supabase Error:", error);
         return res.status(500).json({ error: "Error fetching genre data" });
     }
     if (!data) {
@@ -49,7 +62,10 @@ router.get('/:ref', async (req, res) => {
     res.json(data);
 });
 
-// Get genres by painting
+/**
+ * @route GET /api/genres/painting/:ref
+ * @desc Get genres associated with a specific painting
+ */
 router.get('/painting/:ref', async (req, res) => {
     const paintingId = parseInt(req.params.ref, 10);
 
@@ -60,25 +76,28 @@ router.get('/painting/:ref', async (req, res) => {
     const { data, error } = await supabase
         .from('paintingGenres')
         .select(`
-            genres!inner(genreId, genreName, description, eras!inner(eraId, eraName, eraYears))
-            `)
+            genres!inner(genreId, genreName, description, 
+                eras!inner(eraId, eraName, eraYears)
+            )`)
         .eq('paintingId', paintingId);
+
     if (error) {
-        console.error(error);
+        console.error("Supabase Error:", error);
         return res.status(500).json({ error: "Error fetching genre data" });
     }
     if (!data || data.length === 0) {
         return res.status(404).json({ error: `No genres found for painting ID ${paintingId}.` });
     }
 
+    // Transform and sort data alphabetically by genreName
     const sortedData = data
         .map(item => ({
             genreId: item.genres.genreId,
             genreName: item.genres.genreName,
             description: item.genres.description,
-            eraId: item.genres.eras.eraId,
-            eraName: item.genres.eras.eraName,
-            eraYears: item.genres.eras.eraYears
+            eraId: item.genres.eras?.eraId || null,
+            eraName: item.genres.eras?.eraName || "Unknown",
+            eraYears: item.genres.eras?.eraYears || "Unknown"
         }))
         .sort((a, b) => a.genreName.localeCompare(b.genreName));
 

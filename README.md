@@ -1,6 +1,6 @@
 # COMP 4513 (Winter 2025)
 
-### Assignment #1: Node, SQL (via supabase)
+### Assignment #1: Node, SQL (via Supabase)
 
 ## 🎨 Overview
 
@@ -16,27 +16,28 @@ This API provides information about paintings, artists, genres, and eras. Built 
 - Retrieve paintings by **genre, era, artist, gallery**
 - Fetch **sorted paintings** (title, year)
 - Get **genres & artists with painting counts**
-- Deployed on **Render** [here](https://comp-4513-assignment-1-qgjq.onrender.com/)
+- Deployed on **Render** [View API](https://comp-4513-assignment-1-qgjq.onrender.com/)
 
 ---
 
 ## 📂 **Project Structure**
 
 ```
-w2025-assign1/ 
+w2025-assign1/
 │── data/ # Database and CSV files
-│── node_modueles/ #Libraries for node
-│── routes/ 
-│ ├── paintings.js # Paintings API routes 
-│ ├── artists.js # Artists API routes 
-│ ├── genres.js # Genres API routes 
-│ ├── galleries.js # Galleries API routes 
-│ ├── eras.js # Eras API routes 
-│ ├── counts.js # Count-related API routes (e.g.,top genres) 
-│── .env # Environment variables (Supabase keys) 
-│── .gitignore # Files to ignore in Git  
-│── art-server.js # Main server file 
+│── node_modueles/ #Node.js libraries (auto-installed)
+│── routes/ # API route directory
+│ ├── paintings.js # Paintings API routes
+│ ├── artists.js # Artists API routes
+│ ├── genres.js # Genres API routes
+│ ├── galleries.js # Galleries API routes
+│ ├── eras.js # Eras API routes
+│ ├── counts.js # Count-related API routes (e.g.,top genres)
+│── .env # Environment variables (Supabase keys)
+│── .gitignore # Files to ignore in Git
+│── art-server.js # Main server file
 │── package.json # Node.js dependencies & scripts
+│── package-lock.json # Locks exact dependency versions
 │── README.md # Project documentation
 ```
 
@@ -83,45 +84,50 @@ w2025-assign1/
 | `GET`  | `/api/eras`     | Get all eras             |
 | `GET`  | `/api/eras/:id` | Get a specific era by ID |
 
----
-
 ## 🔗 **Testing Links**
+
 Click any link below to test the API.
 
-- [🔗 `/api/eras`](https://comp-4513-assignment-1-qgjq.onrender.com/api/eras)
-- [🔗 `/api/galleries`](https://your-api-url.onrender.com/api/galleries)
-- [🔗 `/api/galleries/30`](https://your-api-url.onrender.com/api/galleries/30)
-- [🔗 `/api/galleries/Calgary`](https://your-api-url.onrender.com/api/galleries/Calgary)
-- [🔗 `/api/galleries/country/fra`](https://your-api-url.onrender.com/api/galleries/country/fra)
-- [🔗 `/api/artists`](https://your-api-url.onrender.com/api/artists)
-- [🔗 `/api/artists/12`](https://your-api-url.onrender.com/api/artists/12)
-- [🔗 `/api/artists/1223423`](https://your-api-url.onrender.com/api/artists/1223423)
-- [🔗 `/api/artists/search/ma`](https://your-api-url.onrender.com/api/artists/search/ma)
-- [🔗 `/api/artists/search/mA`](https://your-api-url.onrender.com/api/artists/search/mA)
-- [🔗 `/api/artists/country/fra`](https://your-api-url.onrender.com/api/artists/country/fra)
-- [🔗 `/api/paintings`](https://your-api-url.onrender.com/api/paintings)
-- [🔗 `/api/paintings/sort/year`](https://your-api-url.onrender.com/api/paintings/sort/year)
-- [🔗 `/api/paintings/63`](https://your-api-url.onrender.com/api/paintings/63)
-- [🔗 `/api/paintings/search/port`](https://your-api-url.onrender.com/api/paintings/search/port)
-- [🔗 `/api/paintings/search/pORt`](https://your-api-url.onrender.com/api/paintings/search/pORt)
-- [🔗 `/api/paintings/search/connolly`](https://your-api-url.onrender.com/api/paintings/search/connolly)
-- [🔗 `/api/paintings/years/1800/1850`](https://your-api-url.onrender.com/api/paintings/years/1800/1850)
-- [🔗 `/api/paintings/galleries/5`](https://your-api-url.onrender.com/api/paintings/galleries/5)
-- [🔗 `/api/paintings/artist/16`](https://your-api-url.onrender.com/api/paintings/artist/16)
-- [🔗 `/api/paintings/artist/666`](https://your-api-url.onrender.com/api/paintings/artist/666)
-- [🔗 `/api/paintings/artist/country/ital`](https://your-api-url.onrender.com/api/paintings/artist/country/ital)
-- [🔗 `/api/genres`](https://your-api-url.onrender.com/api/genres)
-- [🔗 `/api/genres/76`](https://your-api-url.onrender.com/api/genres/76)
-- [🔗 `/api/genres/painting/408`](https://your-api-url.onrender.com/api/genres/painting/408)
-- [🔗 `/api/genres/painting/jsdfhg`](https://your-api-url.onrender.com/api/genres/painting/jsdfhg)
-- [🔗 `/api/paintings/genre/78`](https://your-api-url.onrender.com/api/paintings/genre/78)
-- [🔗 `/api/paintings/era/2`](https://your-api-url.onrender.com/api/paintings/era/2)
-- [🔗 `/api/counts/genres`](https://your-api-url.onrender.com/api/counts/genres)
-- [🔗 `/api/counts/artists`](https://your-api-url.onrender.com/api/counts/artists)
-- [🔗 `/api/counts/topgenres/20`](https://your-api-url.onrender.com/api/counts/topgenres/20)
-- [🔗 `/api/counts/topgenres/2034958`](https://your-api-url.onrender.com/api/counts/topgenres/2034958)
+### 📌 **Part 1**
 
----
+- [🔗 `/api/eras`](https://comp-4513-assignment-1-qgjq.onrender.com/api/eras)
+- [🔗 `/api/galleries`](https://comp-4513-assignment-1-qgjq.onrender.com/api/galleries)
+- [🔗 `/api/galleries/30`](https://comp-4513-assignment-1-qgjq.onrender.com/api/galleries/30)
+- [🔗 `/api/galleries/Calgary`](https://comp-4513-assignment-1-qgjq.onrender.com/api/galleries/Calgary)
+- [🔗 `/api/galleries/country/fra`](https://comp-4513-assignment-1-qgjq.onrender.com/api/galleries/country/fra)
+- [🔗 `/api/artists`](https://comp-4513-assignment-1-qgjq.onrender.com/api/artists)
+- [🔗 `/api/artists/12`](https://comp-4513-assignment-1-qgjq.onrender.com/api/artists/12)
+- [🔗 `/api/artists/1223423`](https://comp-4513-assignment-1-qgjq.onrender.com/api/artists/1223423)
+- [🔗 `/api/artists/search/ma`](https://comp-4513-assignment-1-qgjq.onrender.com/api/artists/search/ma)
+- [🔗 `/api/artists/search/mA`](https://comp-4513-assignment-1-qgjq.onrender.com/api/artists/search/mA)
+- [🔗 `/api/artists/country/fra`](https://comp-4513-assignment-1-qgjq.onrender.com/api/artists/country/fra)
+
+### 📌 **Part 2**
+
+- [🔗 `/api/paintings`](https://comp-4513-assignment-1-qgjq.onrender.com/api/paintings)
+- [🔗 `/api/paintings/sort/year`](https://comp-4513-assignment-1-qgjq.onrender.com/api/paintings/sort/year)
+- [🔗 `/api/paintings/63`](https://comp-4513-assignment-1-qgjq.onrender.com/api/paintings/63)
+- [🔗 `/api/paintings/search/port`](https://comp-4513-assignment-1-qgjq.onrender.com/api/paintings/search/port)
+- [🔗 `/api/paintings/search/pORt`](https://comp-4513-assignment-1-qgjq.onrender.com/api/paintings/search/pORt)
+- [🔗 `/api/paintings/search/connolly`](https://comp-4513-assignment-1-qgjq.onrender.com/api/paintings/search/connolly)
+- [🔗 `/api/paintings/years/1800/1850`](https://comp-4513-assignment-1-qgjq.onrender.com/api/paintings/years/1800/1850)
+- [🔗 `/api/paintings/galleries/5`](https://comp-4513-assignment-1-qgjq.onrender.com/api/paintings/galleries/5)
+- [🔗 `/api/paintings/artist/16`](https://comp-4513-assignment-1-qgjq.onrender.com/api/paintings/artist/16)
+- [🔗 `/api/paintings/artist/666`](https://comp-4513-assignment-1-qgjq.onrender.com/api/paintings/artist/666)
+- [🔗 `/api/paintings/artist/country/ital`](https://comp-4513-assignment-1-qgjq.onrender.com/api/paintings/artist/country/ital)
+
+### 📌 **Part 3**
+
+- [🔗 `/api/genres`](https://comp-4513-assignment-1-qgjq.onrender.com/api/genres)
+- [🔗 `/api/genres/76`](https://comp-4513-assignment-1-qgjq.onrender.com/api/genres/76)
+- [🔗 `/api/genres/painting/408`](https://comp-4513-assignment-1-qgjq.onrender.com/api/genres/painting/408)
+- [🔗 `/api/genres/painting/jsdfhg`](https://comp-4513-assignment-1-qgjq.onrender.com/api/genres/painting/jsdfhg)
+- [🔗 `/api/paintings/genre/78`](https://comp-4513-assignment-1-qgjq.onrender.com/api/paintings/genre/78)
+- [🔗 `/api/paintings/era/2`](https://comp-4513-assignment-1-qgjq.onrender.com/api/paintings/era/2)
+- [🔗 `/api/counts/genres`](https://comp-4513-assignment-1-qgjq.onrender.com/api/counts/genres)
+- [🔗 `/api/counts/artists`](https://comp-4513-assignment-1-qgjq.onrender.com/api/counts/artists)
+- [🔗 `/api/counts/topgenres/20`](https://comp-4513-assignment-1-qgjq.onrender.com/api/counts/topgenres/20)
+- [🔗 `/api/counts/topgenres/2034958`](https://comp-4513-assignment-1-qgjq.onrender.com/api/counts/topgenres/2034958)
 
 ## 📜 Acknowledgment
 
@@ -129,7 +135,7 @@ This project was developed with the assistance of **ChatGPT**, an AI language mo
 
 ## 📞 Contact
 
-If you have any issues, feel free to open an issue or contact me:
+For any issues, feel free to reach out:
 
 - GitHub: [JustinSerrano](https://github.com/JustinSerrano)
 - Email: justin.serrano1015@gmail.com
