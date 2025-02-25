@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
             genreId,
             genreName,
             description,
-            eras!inner(eraId, eraName, eraYears`);
+            eras!inner(eraId, eraName, eraYears)`);
 
     if (error) {
         console.error("Supabase Error:", error);
@@ -48,7 +48,7 @@ router.get('/:ref', async (req, res) => {
             genreId,
             genreName,
             description,
-            eras!inner(eraId, eraName, eraYears`)
+            eras!inner(eraId, eraName, eraYears)`)
         .eq('genreId', genreId);
 
     if (error) {
